@@ -19,3 +19,5 @@ const ShoppingInfo = new mongoose.Schema({
     required: true,
   },
 });
+
+module.exports = mongoose.model("ShoppingDetails", ShoppingInfo);
