@@ -13,6 +13,7 @@ const {
 } = require("../controller/authenticator.controller");
 const userController = require("../controller/user.controller");
 const productController = require("../controller/productDetails.controller");
+const ShoppingDetailsController = require("../controller/shoppingDetails.controller");
 
 router.post("/sendOtp", userController.sendOtp);
 router.post("/resendOTP", userController.resendOTP);
@@ -21,5 +22,15 @@ router.post("/addProduct", productController.addProduct);
 router.get("/getProduct", authenticator, productController.getProduct);
 router.post("/updateProduct", productController.updateProduct);
 router.post("/deleteProduct", productController.deleteProduct);
+router.post(
+  "/addShoppingDetails",
+  authenticator,
+  ShoppingDetailsController.addShoppingDetails
+);
+router.post(
+  "/updatedShoppingDetails",
+  authenticator,
+  ShoppingDetailsController.updateShoppingDetails
+);
 
 module.exports = router;
