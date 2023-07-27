@@ -1,5 +1,7 @@
 // @ts-nocheck
+
 const db = require("../model/product.model");
+
 
 const addProduct = async (req, res) => {
   const { productName, price, mrp, img, discount, description } = req.body;
