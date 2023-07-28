@@ -105,8 +105,60 @@ const deleteShoppingDetails = async (req, res) => {
   }
 };
 
+const getShoppingDetails = async (req, res) => {
+  const userId = req.body.userId;
+  const shoppingId = req.body.shoppingId;
+  const productId = req.body.productId;
+  try {
+    const shopping = await db.aggregate([
+      {
+        $match: {
+          userId: userId,
+          productId: productId,
+        },
+      },
+      {
+        $lookup: {
+          from: "productdetails",
+          localField: "productId",
+          foreignField: "_id",
+          as: "productDetails",
+        },
+      },
+      {
+        $lookup: {
+          from: "userinfos",
+          localField: "userId",
+          foreignField: "_id",
+          as: "userDetails",
+        },
+      },
+      {
+        $unwind: "$productDetails",
+      },
+      {
+        $project: {
+          _id: 1,
+        },
+      },
+    ]);
+    return res.status(200).send({
+      success: true,
+      message: "Shopping Details Fetched Successfully",
+      data: shopping,
+    });
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).send({
+      success: false,
+      message: "Something Went Wrong",
+    });
+  }
+};
+
 module.exports = {
   addShoppingDetails,
   updateShoppingDetails,
   deleteShoppingDetails,
+  getShoppingDetails,
 };

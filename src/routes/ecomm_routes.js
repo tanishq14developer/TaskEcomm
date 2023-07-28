@@ -32,6 +32,15 @@ router.post(
   authenticator,
   ShoppingDetailsController.updateShoppingDetails
 );
-
+router.delete(
+  "/deleteShoppingDetails",
+  authenticator,
+  ShoppingDetailsController.deleteShoppingDetails
+);
+router.get(
+  "/getShoppingDetails",
+  authenticator,
+  ShoppingDetailsController.getShoppingDetails
+);
 
 module.exports = router;
