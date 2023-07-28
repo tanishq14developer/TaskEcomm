@@ -156,6 +156,7 @@ const getShoppingDetails = async (req, res) => {
   }
 };
 
+
 module.exports = {
   addShoppingDetails,
   updateShoppingDetails,
