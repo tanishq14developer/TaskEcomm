@@ -19,9 +19,7 @@ const sendOtp = async (req, res) => {
     } else {
       const now = new Date();
       const expiration_time = Utils.AddMinutesToDate(now, 10);
-
       const user = await db.findOne({ mobileNo: mobileNo });
-
       let newOtp = Utils.generateOTP();
 
       if (user == null) {
