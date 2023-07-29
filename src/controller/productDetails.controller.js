@@ -2,7 +2,6 @@
 
 const db = require("../model/product.model");
 
-
 const addProduct = async (req, res) => {
   const { productName, price, mrp, img, discount, description } = req.body;
   try {
@@ -61,7 +60,7 @@ const addProduct = async (req, res) => {
 };
 
 const updateProduct = async (req, res) => {
-  const productId = req.params.id;
+  const productId = req.query.id;
   const { productName, price, mrp, img, discount, description } = req.body;
   try {
     if (productName == null) {
@@ -97,7 +96,7 @@ const updateProduct = async (req, res) => {
     }
 
     const product = await db.findByIdAndUpdate(
-      { _id: productId },
+      productId,
       {
         $set: {
           productName: productName,

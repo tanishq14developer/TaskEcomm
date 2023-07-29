@@ -20,7 +20,7 @@ router.post("/resendOTP", userController.resendOTP);
 router.post("/verifyOtp", userController.verifyOtp);
 router.post("/addProduct", productController.addProduct);
 router.get("/getProduct", authenticator, productController.getProduct);
-router.post("/updateProduct", productController.updateProduct);
+router.patch("/updateProduct", productController.updateProduct);
 router.post("/deleteProduct", productController.deleteProduct);
 router.post(
   "/addShoppingDetails",
