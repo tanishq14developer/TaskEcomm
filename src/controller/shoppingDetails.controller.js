@@ -103,15 +103,13 @@ const deleteShoppingDetails = async (req, res) => {
 const getShoppingDetails = async (req, res) => {
   const shoppingId = req.query.id;
   const productId = req.query.productId;
-
-  console.log(shoppingId);
-
   try {
     const shopping = await db.aggregate([
       {
         $match: {
           // @ts-ignore
           _id: shoppingId, // Convert to ObjectId
+
         },
       },
       {
@@ -132,6 +130,7 @@ const getShoppingDetails = async (req, res) => {
               },
             },
           ],
+
           as: "productDetails",
         },
       },
@@ -141,6 +140,7 @@ const getShoppingDetails = async (req, res) => {
     ]);
 
     // const shopping = await db.findById(shoppingId);
+
 
     return res.status(200).send({
       success: true,
