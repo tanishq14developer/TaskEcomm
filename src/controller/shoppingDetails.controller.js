@@ -1,18 +1,13 @@
 const db = require("../model/shopping.model");
+const mongoose = require("mongoose");
 const Utils = require("../Utils");
 
 const addShoppingDetails = async (req, res) => {
-  const userId = req.body.userId;
   const productId = req.body.productId;
   const quantity = req.body.quantity;
   const totalAmount = req.body.totalAmount;
   try {
-    if (userId == null) {
-      return res.status(400).send({
-        success: false,
-        message: "User Id cannot be empty",
-      });
-    } else if (productId == null) {
+    if (productId == null) {
       return res.status(400).send({
         success: false,
         message: "Product Id cannot be empty",
@@ -30,7 +25,7 @@ const addShoppingDetails = async (req, res) => {
     }
 
     const shopping = await db.create({
-      userId: userId,
+      userId: req.user.userId,
       productId: productId,
       quantity: quantity,
       totalAmount: totalAmount,
@@ -106,42 +101,47 @@ const deleteShoppingDetails = async (req, res) => {
 };
 
 const getShoppingDetails = async (req, res) => {
-  const userId = req.body.userId;
-  const shoppingId = req.body.shoppingId;
-  const productId = req.body.productId;
+  const shoppingId = req.query.id;
+  const productId = req.query.productId;
   try {
     const shopping = await db.aggregate([
       {
         $match: {
-          userId: userId,
-          productId: productId,
+          // @ts-ignore
+          _id: shoppingId, // Convert to ObjectId
+
         },
       },
       {
         $lookup: {
-          from: "productdetails",
-          localField: "productId",
-          foreignField: "_id",
+          from: "ProductDetails",
+          let: {
+            productId: "$productId",
+            shoppingId: "$_id", // Use the correct field name here
+          },
+          pipeline: [
+            {
+              $match: {
+                $expr: {
+                  $and: [
+                    { $eq: ["$_id", "$$productId"] }, // Use $$ notation to access the variables
+                  ],
+                },
+              },
+            },
+          ],
+
           as: "productDetails",
-        },
-      },
-      {
-        $lookup: {
-          from: "userinfos",
-          localField: "userId",
-          foreignField: "_id",
-          as: "userDetails",
         },
       },
       {
         $unwind: "$productDetails",
       },
-      {
-        $project: {
-          _id: 1,
-        },
-      },
     ]);
+
+    // const shopping = await db.findById(shoppingId);
+
+
     return res.status(200).send({
       success: true,
       message: "Shopping Details Fetched Successfully",

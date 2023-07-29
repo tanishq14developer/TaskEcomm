@@ -18,8 +18,12 @@ async function checkOrdersAndSendEmail() {
     createdAt: { $gte: oneHourAgo, $lte: now },
   });
 
+  console.log("Orders placed 60 minutes ago:", ordersPlaced60MinutesAgo);
+
   for (let i = 0; i < ordersPlaced60MinutesAgo.length; i++) {
     const order = ordersPlaced60MinutesAgo[i];
+    console.log("Order:", ordersPlaced60MinutesAgo);
+
 
     const customerEmail = order.email;
 
